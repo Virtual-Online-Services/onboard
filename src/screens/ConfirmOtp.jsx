@@ -54,6 +54,7 @@ const ConfirmOTP = () => {
         <Button type="submit" disabled={loading}>
           {loading ? <span className="spinner" /> : "Verify"}
         </Button>
+
         {/* <p className="text-center text-muted mt-3">
           Resend Pin in 10 seconds...
         </p> */}
