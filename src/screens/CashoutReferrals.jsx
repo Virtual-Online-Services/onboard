@@ -273,7 +273,6 @@ const CashoutReferrals = () => {
             )}
           </>
         )}
-
         <input
           type="number"
           name="amount"
