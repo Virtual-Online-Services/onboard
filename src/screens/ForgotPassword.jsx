@@ -60,14 +60,7 @@ const ForgotPassword = () => {
           required
         />
         <Button type="submit" disabled={loading}>
-          {loading ? (
-            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span className="spinner" />
-              Sending...
-            </span>
-          ) : (
-            "Send Reset Code"
-          )}
+          {loading ? <span className="spinner" /> : "Send Reset Code"}
         </Button>
       </form>
     </Container>

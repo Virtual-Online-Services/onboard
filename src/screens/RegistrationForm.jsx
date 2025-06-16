@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // import ReCAPTCHA from "react-google-recaptcha";
@@ -22,8 +22,9 @@ const RegistrationForm = () => {
     lga: "",
     terms: false,
   });
-
-  // const [captchaToken, setCaptchaToken] = useState(null);
+  const [states, setStates] = useState([]);
+  const [lgas, setLgas] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -75,23 +76,60 @@ const RegistrationForm = () => {
     } catch (error) {
       const message =
         error.response?.data?.message ||
-        error.response?.data?.messgae || // <- handle typo fallback
+        error.response?.data?.messgae ||
         "Registration failed. Please try again.";
 
       toast.error(message);
     }
   };
 
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const response = await HTTP.get("/get-states");
+        setStates(response.data.data);
+      } catch (error) {
+        toast.error("Failed to load states. Please try again.");
+      }
+    };
+
+    fetchStates();
+  }, []);
+
+  const fetchLgas = async (state) => {
+    try {
+      const response = await HTTP.get(`/get-local-government/${state}`);
+      setLgas(response.data.data);
+    } catch (error) {
+      toast.error("Failed to load LGAs. Please try again.");
+    }
+  };
+
+  const handleStateChange = (e) => {
+    const state = e.target.value;
+    setFormData({ ...formData, state });
+    setSelectedState(state);
+    setLgas([]);
+    if (state) {
+      fetchLgas(state);
+    }
+  };
+
+  const handleLgaChange = (e) => {
+    const lga = e.target.value;
+    setFormData({ ...formData, lga });
+  };
+
   return (
     <Container>
       <Logo />
       <h5 className="text-left mb-2">Register with Phone Number</h5>
-      <p className="text-left mb-2">
+      <p className="text-left mb-4">
         Welcome to Onboarder, please input your details to register.
       </p>
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="First Name"
+          // label="First Name"
           name="firstname"
           value={formData.firstname}
           onChange={handleChange}
@@ -99,7 +137,7 @@ const RegistrationForm = () => {
           required
         />
         <FormInput
-          label="Surname"
+          // label="Surname"
           name="surname"
           value={formData.surname}
           onChange={handleChange}
@@ -107,7 +145,7 @@ const RegistrationForm = () => {
           required
         />
         <FormInput
-          label="Username"
+          // label="Username"
           name="username"
           value={formData.username}
           onChange={handleChange}
@@ -115,7 +153,7 @@ const RegistrationForm = () => {
           required
         />
         <FormInput
-          label="Phone Number"
+          // label="Phone Number"
           type="tel"
           name="phoneNumber"
           value={formData.phoneNumber}
@@ -125,25 +163,27 @@ const RegistrationForm = () => {
         />
 
         <FormInput
-          label="State"
+          // label="State"
           type="select"
           name="state"
           value={formData.state}
-          onChange={handleChange}
-          placeholder="Confirm Location"
+          onChange={handleStateChange}
+          placeholder="Select State"
           required
-          options={[{ value: "lagos", label: "Lagos" }]}
+          options={states.map((s) => ({ value: s, label: s }))}
         />
+
         <FormInput
-          label="LGA"
+          // label="LGA"
           type="select"
           name="lga"
           value={formData.lga}
-          onChange={handleChange}
-          placeholder="Confirm Location"
+          onChange={handleLgaChange}
+          placeholder="Select LGA"
           required
-          options={[{ value: "ikeja", label: "Ikeja" }]}
+          options={lgas.map((l) => ({ value: l, label: l }))}
         />
+
         <FormInput
           label="I have read the Terms and Conditions"
           type="checkbox"

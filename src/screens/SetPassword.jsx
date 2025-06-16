@@ -5,7 +5,7 @@ import Container from "../components/Container";
 import Logo from "../components/Logo";
 import FormInput from "../components/FormInput";
 import Button from "../components/Button";
-import { HTTP } from "../utils"; // Axios instance
+import { HTTP } from "../utils";
 
 const SetPassword = () => {
   const navigate = useNavigate();
@@ -14,6 +14,8 @@ const SetPassword = () => {
     password: "",
     reconfirmPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showReconfirm, setShowReconfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const phone = location?.state?.phone;
@@ -41,15 +43,22 @@ const SetPassword = () => {
     try {
       setLoading(true);
       const payload = {
-        phone: phone,
+        user_details: phone,
         password: formData.password,
       };
 
-      const response = await HTTP.post("/create-password", payload);
+      const response = await HTTP.post("/user/reset_onboarders", payload);
 
-      if (response?.data?.status === "success") {
+      if (response?.status === 200) {
         toast.success("Password set successfully!");
-        navigate("/registration-completed");
+        navigate("/registration-completed", {
+          state: {
+            heading: "Password Reset Successful",
+            message: "You can now log in with your new password.",
+            buttonText: "Login Now",
+            redirectTo: "/login-dark",
+          },
+        });
       } else {
         toast.error(response?.data?.error || "Unexpected error occurred.");
       }
@@ -70,23 +79,58 @@ const SetPassword = () => {
         Do not share this password with anyone.
       </p>
       <form onSubmit={handleSubmit}>
-        <FormInput
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Enter Password"
-          required
-        />
-        <FormInput
-          label="Reconfirm Password"
-          type="password"
-          name="reconfirmPassword"
-          value={formData.reconfirmPassword}
-          onChange={handleChange}
-          placeholder="Reconfirm Password"
-          required
-        />
+        {/* Password Field with Toggle */}
+        <div style={{ position: "relative" }}>
+          <FormInput
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter Password"
+            required
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              top: "50%",
+              right: "12px",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              color: "#666",
+            }}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </span>
+        </div>
+
+        {/* Confirm Password Field with Toggle */}
+        <div style={{ position: "relative" }}>
+          <FormInput
+            type={showReconfirm ? "text" : "password"}
+            name="reconfirmPassword"
+            value={formData.reconfirmPassword}
+            onChange={handleChange}
+            placeholder="Reconfirm Password"
+            required
+          />
+          <span
+            onClick={() => setShowReconfirm(!showReconfirm)}
+            style={{
+              position: "absolute",
+              top: "50%",
+              right: "12px",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              color: "#666",
+            }}
+          >
+            {showReconfirm ? "Hide" : "Show"}
+          </span>
+        </div>
+
         <Button type="submit" disabled={loading}>
           {loading ? <span className="spinner" /> : "Save Password"}
         </Button>

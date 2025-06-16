@@ -37,14 +37,14 @@ const App = () => {
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/get-paid-bank"
           element={
             <PrivateRoute>
               <GetPaid />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/cashout-referrals"
           element={

@@ -9,9 +9,14 @@ const LoginInitial = () => {
   return (
     <Container>
       <Logo />
-      <Button onClick={() => navigate("/registration")}>
-        Register with Phone Number
-      </Button>
+      <p
+        className="mb-3 text-center"
+        style={{ fontStyle: "italic", fontSize: "17px" }}
+      >
+        Earn easy cash referring friends! <br />
+        Join our affiliate platform, share your ID, and grow your income.
+      </p>
+      <Button onClick={() => navigate("/registration")}>Register</Button>
       <Button onClick={() => navigate("/login-dark")}>Sign In</Button>
     </Container>
   );

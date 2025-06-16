@@ -14,7 +14,7 @@ const FormInput = ({
 }) => {
   return (
     <div className="form-group mb-3">
-      {label && <label className="form-label">{label}</label>}
+      {/* {label && <label className="form-label">{label}</label>} */}
       {type === "select" ? (
         <select
           name={name}

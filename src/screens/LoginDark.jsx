@@ -13,7 +13,8 @@ const LoginDark = () => {
     phoneNumber: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false); // 🔄 Spinner state
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +34,15 @@ const LoginDark = () => {
       };
 
       const response = await HTTP.post("/login", payload);
-      const token = response?.data?.token;
 
-      if (token) {
-        sessionStorage.setItem("authToken", token);
-        toast.success("Login successful!");
+      const user = response?.data?.data;
+      const accessToken = response?.data?.token?.accessToken;
+
+      if (accessToken) {
+        sessionStorage.setItem("authToken", accessToken);
+        sessionStorage.setItem("user", JSON.stringify(user));
+
+        toast.success("Login Successfully");
         navigate("/welcome-dashboard");
       } else {
         toast.error("Unexpected error. Please try again.");
@@ -51,6 +56,10 @@ const LoginDark = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <Container isDarkTheme={false}>
       <Logo isDarkTheme={false} />
@@ -60,7 +69,7 @@ const LoginDark = () => {
       </p>
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="Phone Number"
+          // label="Phone Number"
           type="tel"
           name="phoneNumber"
           value={formData.phoneNumber}
@@ -68,31 +77,40 @@ const LoginDark = () => {
           placeholder="Enter Phone Number"
           required
         />
-        <FormInput
-          label="Password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Enter Password"
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <FormInput
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter Password"
+            required
+          />
+          <span
+            onClick={togglePasswordVisibility}
+            style={{
+              position: "absolute",
+              right: "12px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              color: "#666",
+            }}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </span>
+        </div>
+
         <a
           href="#"
           onClick={() => navigate("/forgot-password")}
-          className="text-muted mb-3 d-block text-decoration-none"
+          className="text-dark mb-3 d-block text-decoration-none"
         >
           Forgot Password?
         </a>
         <Button type="submit" disabled={loading}>
-          {loading ? (
-            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span className="spinner" />
-              Logging in...
-            </span>
-          ) : (
-            "Login"
-          )}
+          {loading ? <span className="spinner" /> : "Login"}
         </Button>
         <p className="text-center mt-3 text-dark">
           Are you new here?{" "}

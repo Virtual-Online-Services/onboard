@@ -1,90 +1,91 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    sessionStorage.clear();
+    navigate("/login-dark");
+    toast.success("Logout Successfully");
+  };
+
   return (
     <div
-      className="offcanvas offcanvas-start text-drk"
+      className="offcanvas offcanvas-start"
       tabIndex="-1"
       id="sidebar"
       aria-labelledby="sidebarLabel"
+      style={{ width: "250px", backgroundColor: "#f8f9fa" }}
     >
-      <div className="offcanvas-header text-dark">
-        <h5 className="offcanvas-title text-dark" id="sidebarLabel">
-          Menu
+      <div className="offcanvas-header border-bottom">
+        <h5 id="sidebarLabel" className="offcanvas-title">
+          <i className="fa fa-user me-2"></i> Menu
         </h5>
         <button
           type="button"
-          className="btn-close text-dark"
+          className="btn-close"
           data-bs-dismiss="offcanvas"
           aria-label="Close"
         ></button>
       </div>
-      <div className="offcanvas-body">
-        <ul className="list-unstyled">
-          <li className="mb-2">
-            <a
-              href="#"
+
+      <div className="offcanvas-body p-0">
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item py-3 px-4">
+            <button
               onClick={() => {
+                document
+                  .querySelector('[data-bs-dismiss="offcanvas"]')
+                  ?.click();
                 navigate("/welcome-dashboard");
-                document.getElementById("sidebar").classList.remove("show");
               }}
-              className="text-decoration-none text-dark"
+              className="btn btn-link text-decoration-none text-dark p-0 w-100 text-start"
             >
+              <i className="fa fa-home me-2" />
               Dashboard
-            </a>
+            </button>
           </li>
-          <li className="mb-2">
-            <a
-              href="#"
+
+          <li className="list-group-item py-3 px-4">
+            <button
               onClick={() => {
-                navigate("/get-paid-bank");
-                document.getElementById("sidebar").classList.remove("show");
-              }}
-              className="text-decoration-none text-dark"
-            >
-              Get Paid
-            </a>
-          </li>
-          <li className="mb-2">
-            <a
-              href="#"
-              onClick={() => {
+                document
+                  .querySelector('[data-bs-dismiss="offcanvas"]')
+                  ?.click();
                 navigate("/cashout-referrals");
-                document.getElementById("sidebar").classList.remove("show");
               }}
-              className="text-decoration-none text-dark"
+              className="btn btn-link text-decoration-none text-dark p-0 w-100 text-start"
             >
+              <i className="fa fa-wallet me-2" />
               Cashout Referrals
-            </a>
+            </button>
           </li>
 
-          <li className="mb-2">
-            <a
-              href="#"
+          <li className="list-group-item py-3 px-4">
+            <button
               onClick={() => {
+                document
+                  .querySelector('[data-bs-dismiss="offcanvas"]')
+                  ?.click();
                 navigate("/customer-complaints");
-                document.getElementById("sidebar").classList.remove("show");
               }}
-              className="text-decoration-none text-dark"
+              className="btn btn-link text-decoration-none text-dark p-0 w-100 text-start"
             >
+              <i className="fa fa-comments me-2" />
               Customer Complaints
-            </a>
+            </button>
           </li>
 
-          <li className="mb-2">
-            <a
-              href="#"
-              onClick={() => {
-                navigate("/login-dark");
-                document.getElementById("sidebar").classList.remove("show");
-              }}
-              className="text-decoration-none text-dark"
+          <li className="list-group-item py-3 px-4">
+            <button
+              className="btn btn-link text-decoration-none text-dark p-0"
+              onClick={handleLogout}
             >
-              Login
-            </a>
+              <i className="fa fa-sign-out-alt me-2" />
+              Logout
+            </button>
           </li>
         </ul>
       </div>

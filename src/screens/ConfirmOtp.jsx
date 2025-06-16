@@ -52,18 +52,11 @@ const ConfirmOTP = () => {
       <form onSubmit={handleSubmit}>
         <OTPInput onChange={setOtp} />
         <Button type="submit" disabled={loading}>
-          {loading ? (
-            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span className="spinner" />
-              Verifying...
-            </span>
-          ) : (
-            "Verify"
-          )}
+          {loading ? <span className="spinner" /> : "Verify"}
         </Button>
-        <p className="text-center text-muted mt-3">
+        {/* <p className="text-center text-muted mt-3">
           Resend Pin in 10 seconds...
-        </p>
+        </p> */}
       </form>
     </Container>
   );
