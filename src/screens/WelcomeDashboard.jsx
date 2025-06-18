@@ -6,7 +6,9 @@ import Button from "../components/Button";
 import Sidebar from "../components/Sidebar";
 import { HTTP } from "../utils";
 import moment from "moment";
+import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
+import "react-datepicker/dist/react-datepicker.css";
 
 const WelcomeDashboard = () => {
   const navigate = useNavigate();
@@ -140,21 +142,25 @@ const WelcomeDashboard = () => {
       </div>
       <div className="row mb-3">
         <div className="col-md-4 mb-3">
-          <input
-            type="date"
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            dateFormat="dd/MM/yyyy"
             className="form-control"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            placeholder="Start Date"
+            placeholderText="Start Date (dd/mm/yyyy)"
+            maxDate={new Date()}
+            isClearable
           />
         </div>
         <div className="col-md-4 mb-3">
-          <input
-            type="date"
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            dateFormat="dd/MM/yyyy"
             className="form-control"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            placeholder="End Date"
+            placeholderText="End Date (dd/mm/yyyy)"
+            maxDate={new Date()}
+            isClearable
           />
         </div>
         <div className="col-md-4">

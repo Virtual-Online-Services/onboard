@@ -15,7 +15,7 @@ const LoginInitial = () => {
   }, []);
 
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper mt-5">
       <Container>
         <Logo />
         <p
