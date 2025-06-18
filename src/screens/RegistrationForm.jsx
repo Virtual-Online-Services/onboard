@@ -63,7 +63,7 @@ const RegistrationForm = () => {
         firstname: formData.firstname,
         surname: formData.surname,
         username: formData.username,
-        phone_number: formData.phoneNumber,
+        tell: formData.phoneNumber,
         state: formData.state,
         lga: formData.lga,
         platform: "mobile",
