@@ -15,45 +15,62 @@ const WelcomeDashboard = () => {
   const [referralMeta, setReferralMeta] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      fetchReferrals(parsedUser.id, 1);
-    } else {
-      navigate("/login-dark");
-    }
+    if (!storedUser) return navigate("/login-dark");
+
+    const parsedUser = JSON.parse(storedUser);
+    setUser(parsedUser);
   }, []);
 
-  const fetchReferrals = async (userId, page) => {
+  const fetchReferrals = async (userId, page = 1, start = "", end = "") => {
     setIsLoading(true);
-
     const token = sessionStorage.getItem("authToken");
 
-    try {
-      const res = await HTTP.get(`/user/referral/${userId}?page=${page}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const queryParams = new URLSearchParams({
+      page,
+      ...(start && { start_date: start }),
+      ...(end && { end_date: end }),
+    });
 
-      setReferrals(res.data.data || []);
-      setReferralMeta(res.data);
+    try {
+      const res = await HTTP.get(
+        `/user/referral/${userId}?${queryParams.toString()}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const result = res.data.data;
+      setReferrals(result.data || []);
+      setReferralMeta(result);
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to load referrals");
+      // toast.error(err?.response?.data?.message || "Failed to load referrals");
     } finally {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (user) {
+      fetchReferrals(user.id, currentPage);
+    }
+  }, [user, currentPage]);
 
   const handlePageClick = (label, url) => {
-    if (!url) return;
+    if (!url || !user) return;
     const match = url.match(/page=(\d+)/);
     const page = match ? parseInt(match[1]) : 1;
-    fetchReferrals(user.id, page);
     setCurrentPage(page);
+    fetchReferrals(user.id, page, startDate, endDate);
+  };
+
+  const handleFilter = () => {
+    if (!user) return;
+    setCurrentPage(1);
+    fetchReferrals(user.id, 1, startDate, endDate);
   };
 
   const notifyCopy = async (link) => {
@@ -73,18 +90,15 @@ const WelcomeDashboard = () => {
         await navigator.share({
           title: "Check out MyLottoHub",
           text: "Join MyLottoHub and explore the exciting world of lotteries!",
-          url: `https://mylottohub.com/sign-up-with-your-phone-number?user=${user?.id}`,
+          url: referralLink,
         });
       } catch (error) {
-        console.error("Error sharing:", error);
         toast("Error sharing link");
       }
     } else {
-      console.warn("Share API not supported, implement custom sharing logic");
       toast("Share API not supported");
     }
   };
-  console.log(referrals);
 
   return (
     <Container>
@@ -97,11 +111,7 @@ const WelcomeDashboard = () => {
             data-bs-toggle="offcanvas"
             data-bs-target="#sidebar"
             aria-controls="sidebar"
-            style={{
-              fontSize: "24px",
-              background: "none",
-              color: "#000",
-            }}
+            style={{ fontSize: "24px", background: "none", color: "#000" }}
           >
             <i className="fa fa-bars" />
           </button>
@@ -114,27 +124,44 @@ const WelcomeDashboard = () => {
         Welcome {user?.name || user?.username || "User"}
       </h5>
 
-      <p className="text-left mb-4">
-        <span className="fw-bolder">ID:</span> {user?.id} <br />
-        <span className="fw-bolder">Target:</span> Target: 0
-        <br />
-        <span className="fw-bolder">
-          Onboardings Customers Onboarded:
-        </span> 0 <br />
-        <span className="fw-bolder"> Total Number of Referrals:</span>{" "}
-        {referrals?.total} <br />
-        <span className="fw-bolder">
-          Customers Amount earned from funding:
-        </span>{" "}
-        ₦
+      <p className="text-left mb-4 fw-bolder">
+        <span>ID:</span> {user?.id} <br />
+        <span>Target:</span> 0 <br />
+        <span>Target onboarded:</span> 0 <br />
+        <span>Number of target met:</span> 0 <br />
+        <span>Total Referrals:</span> {referralMeta?.total || 0} <br />
+        <span>Amount Earned:</span> ₦
       </p>
+
       <div className="d-flex gap-2 mb-4">
-        {/* <Button onClick={() => navigate("/get-paid-bank")} variant="secondary">
-          Get Paid
-        </Button> */}
         <Button onClick={() => navigate("/cashout-referrals")}>
           Cashout Referrals
         </Button>
+      </div>
+      <div className="row mb-3">
+        <div className="col-md-4 mb-3">
+          <input
+            type="date"
+            className="form-control"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            placeholder="Start Date"
+          />
+        </div>
+        <div className="col-md-4 mb-3">
+          <input
+            type="date"
+            className="form-control"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            placeholder="End Date"
+          />
+        </div>
+        <div className="col-md-4">
+          <button className="btn btn-dark w-100" onClick={handleFilter}>
+            Apply Filter
+          </button>
+        </div>
       </div>
 
       <div className="row mb-4">
@@ -167,7 +194,7 @@ const WelcomeDashboard = () => {
         <div className="text-center my-4">
           <i className="fa fa-spinner fa-spin fa-2x text-primary" />
         </div>
-      ) : referrals?.data?.length === 0 ? (
+      ) : referrals?.length === 0 ? (
         <div className="alert alert-warning text-center">
           No referral data found.
         </div>
@@ -182,7 +209,7 @@ const WelcomeDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {referrals?.data?.map((ref, index) => (
+              {referrals.map((ref, index) => (
                 <tr key={index}>
                   <td className="text-capitalize">{ref.username}</td>
                   <td>
@@ -194,29 +221,31 @@ const WelcomeDashboard = () => {
             </tbody>
           </table>
 
-          <nav>
-            <ul className="pagination">
-              {referralMeta?.links?.map((link, idx) => (
-                <li
-                  key={idx}
-                  className={`page-item ${link.active ? "active" : ""}`}
-                >
-                  <a
-                    href={link.url || "#"}
-                    className="page-link"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handlePageClick(link.label, link.url);
-                    }}
+          <nav className="mt-4">
+            <ul className="pagination justify-content-center">
+              {referralMeta?.links
+                ?.filter(
+                  (link) =>
+                    link.label !== "&laquo; Previous" &&
+                    link.label !== "Next &raquo;"
+                )
+                .map((link, idx) => (
+                  <li
+                    key={idx}
+                    className={`page-item ${link.active ? "active" : ""} ${
+                      !link.url ? "disabled" : ""
+                    }`}
                   >
-                    {link.label === "&laquo; Previous"
-                      ? "Previous"
-                      : link.label === "Next &raquo;"
-                      ? "Next"
-                      : link.label}
-                  </a>
-                </li>
-              ))}
+                    <button
+                      className="page-link"
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (link.url) handlePageClick(link.label, link.url);
+                      }}
+                    />
+                  </li>
+                ))}
             </ul>
           </nav>
         </>

@@ -170,6 +170,9 @@ const CashoutReferrals = () => {
 
   return (
     <Container>
+      <Button variant="secondary" onClick={() => navigate(-1)} className="mb-3">
+        <i className="fa fa-arrow-left" /> Back
+      </Button>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Logo />
         <div className="ms-auto">
@@ -231,6 +234,15 @@ const CashoutReferrals = () => {
               placeholder="Account Name"
               disabled
             />
+
+            <input
+              type="number"
+              name="amount"
+              value={referralBalance}
+              onChange={handleChange}
+              className="form-control mb-3"
+              disabled
+            />
           </>
         ) : (
           <>
@@ -268,20 +280,21 @@ const CashoutReferrals = () => {
               disabled
             />
 
+            <input
+              type="number"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              className="form-control mb-3"
+              placeholder="Enter Amount"
+              required
+            />
+
             {resolving && (
               <small className="text-muted">Resolving account name...</small>
             )}
           </>
         )}
-        <input
-          type="number"
-          name="amount"
-          value={formData.amount}
-          onChange={handleChange}
-          className="form-control mb-3"
-          placeholder="Enter Amount"
-          required
-        />
 
         <Button type="submit" disabled={loading}>
           {loading ? (

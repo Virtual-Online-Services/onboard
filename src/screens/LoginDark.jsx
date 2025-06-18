@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Container from "../components/Container";
@@ -9,6 +9,12 @@ import { HTTP } from "../utils";
 
 const LoginDark = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) {
+      navigate("/welcome-dashboard");
+    }
+  }, []);
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
@@ -61,69 +67,71 @@ const LoginDark = () => {
   };
 
   return (
-    <Container isDarkTheme={false}>
-      <Logo isDarkTheme={false} />
-      <h5 className="text-left mb-2 text-dark">Login with Phone Number</h5>
-      <p className="text-left mb-4 text-dark">
-        Welcome back, please input your details to access your account.
-      </p>
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          // label="Phone Number"
-          type="tel"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={handleChange}
-          placeholder="Enter Phone Number"
-          required
-        />
-        <div style={{ position: "relative" }}>
+    <div className="page-wrapper">
+      <Container isDarkTheme={false}>
+        <Logo isDarkTheme={false} />
+        <h5 className="text-left mb-2 text-dark">Login with Phone Number</h5>
+        <p className="text-left mb-4 text-dark">
+          Welcome back, please input your details to access your account.
+        </p>
+        <form onSubmit={handleSubmit}>
           <FormInput
-            type={showPassword ? "text" : "password"}
-            name="password"
-            value={formData.password}
+            // label="Phone Number"
+            type="tel"
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
-            placeholder="Enter Password"
+            placeholder="Enter Phone Number"
             required
           />
-          <span
-            onClick={togglePasswordVisibility}
-            style={{
-              position: "absolute",
-              right: "12px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              color: "#666",
-            }}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </span>
-        </div>
+          <div style={{ position: "relative" }}>
+            <FormInput
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter Password"
+              required
+            />
+            <span
+              onClick={togglePasswordVisibility}
+              style={{
+                position: "absolute",
+                right: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                color: "#666",
+              }}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </span>
+          </div>
 
-        <a
-          href="#"
-          onClick={() => navigate("/forgot-password")}
-          className="text-dark mb-3 d-block text-decoration-none"
-        >
-          Forgot Password?
-        </a>
-        <Button type="submit" disabled={loading}>
-          {loading ? <span className="spinner" /> : "Login"}
-        </Button>
-        <p className="text-center mt-3 text-dark">
-          Are you new here?{" "}
           <a
             href="#"
-            onClick={() => navigate("/registration")}
-            className="text-red text-decoration-none"
+            onClick={() => navigate("/forgot-password")}
+            className="text-dark mb-3 d-block text-decoration-none"
           >
-            Register New Account
+            Forgot Password?
           </a>
-        </p>
-      </form>
-    </Container>
+          <Button type="submit" disabled={loading}>
+            {loading ? <span className="spinner" /> : "Login"}
+          </Button>
+          <p className="text-center mt-3 text-dark">
+            Are you new here?{" "}
+            <a
+              href="#"
+              onClick={() => navigate("/registration")}
+              className="text-red text-decoration-none"
+            >
+              Register
+            </a>
+          </p>
+        </form>
+      </Container>
+    </div>
   );
 };
 

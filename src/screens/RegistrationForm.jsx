@@ -13,6 +13,13 @@ import Button from "../components/Button";
 const RegistrationForm = () => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) {
+      navigate("/welcome-dashboard");
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     firstname: "",
     surname: "",
@@ -89,10 +96,9 @@ const RegistrationForm = () => {
         const response = await HTTP.get("/get-states");
         setStates(response.data.data);
       } catch (error) {
-        toast.error("Failed to load states. Please try again.");
+        // toast.error("Failed to load states. Please try again.");
       }
     };
-
     fetchStates();
   }, []);
 
@@ -101,7 +107,7 @@ const RegistrationForm = () => {
       const response = await HTTP.get(`/get-local-government/${state}`);
       setLgas(response.data.data);
     } catch (error) {
-      toast.error("Failed to load LGAs. Please try again.");
+      // toast.error("Failed to load LGAs. Please try again.");
     }
   };
 
@@ -119,6 +125,10 @@ const RegistrationForm = () => {
     const lga = e.target.value;
     setFormData({ ...formData, lga });
   };
+
+  const [showModal, setShowModal] = useState(false);
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <Container>
@@ -183,23 +193,172 @@ const RegistrationForm = () => {
           required
           options={lgas.map((l) => ({ value: l, label: l }))}
         />
-
-        <FormInput
-          label="I have read the Terms and Conditions"
-          type="checkbox"
-          name="terms"
-          value={formData.terms}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="terms"
+            name="terms"
+            checked={formData.terms}
+            onChange={handleChange}
+            required
+          />
+          <label
+            htmlFor="terms"
+            className="form-check-label"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setShowModal(true);
+              setFormData((prev) => ({ ...prev, terms: true }));
+            }}
+          >
+            I agree to the{" "}
+            <span className="text-primary">Terms and Conditions</span>
+          </label>
+        </div>
 
         {/* ReCAPTCHA Component */}
         {/* <div className="my-4">
           <ReCAPTCHA sitekey={siteKey} onChange={handleCaptchaVerification} />
         </div> */}
 
-        <Button type="submit">Finish</Button>
+        <Button type="submit">Proceed</Button>
+
+        <div className="text-center mt-3">
+          <p>
+            Already have an account?{" "}
+            <span
+              className="text-primary"
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/login-dark")}
+            >
+              Login
+            </span>
+          </p>
+        </div>
       </form>
+      {showModal && (
+        <div
+          className="modal fade show"
+          style={{
+            display: "block",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1050,
+          }}
+        >
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Terms and Conditions</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleCloseModal}
+                ></button>
+              </div>
+              <div
+                className="modal-body"
+                style={{ maxHeight: "60vh", overflowY: "auto" }}
+              >
+                <p>
+                  <strong>Onboarder</strong> is an online super affiliate
+                  monitoring platform that allows affiliate marketers and brands
+                  to directly monitor progress and results, and also helps
+                  stimulate brand spread and easy earnings.
+                </p>
+
+                <p>
+                  An onboarder registers on the Onboarder platform and is
+                  assigned a user ID. This user ID is then embedded into partner
+                  platforms during registrations to enable the referrer to track
+                  their progress and directly get paid into their bank accounts
+                  for efforts made in registering a new user onto the brand.
+                </p>
+
+                <h6>How to earn with Onboarder</h6>
+                <ol>
+                  <li>User registers on Onboarder platform.</li>
+                  <li>
+                    A user ID is assigned to the user on the Onboarder platform.
+                  </li>
+                  <li>
+                    User introduces a new user to the partner’s platform
+                    (MyLottoHub) and encourages them to use their ID during
+                    registration.
+                  </li>
+                  <li>
+                    The referrer earns an amount for every account successfully
+                    opened on the brand’s platform (MyLottoHub).
+                  </li>
+                  <li>
+                    The referred customer will receive a welcome credit
+                    deposited/funded into their account via the promoted brand
+                    (MyLottoHub).
+                  </li>
+                </ol>
+
+                <h6>Tasks to Get Paid</h6>
+                <ol>
+                  <li>
+                    The onboarder will have daily targets (number of customers
+                    to onboard) that must be met before payment is issued.
+                  </li>
+                  <li>
+                    The number of targets is set by the partner brand
+                    (MyLottoHub).
+                  </li>
+                  <li>
+                    The amount paid per acquisition is determined by the partner
+                    brand.
+                  </li>
+                  <li>
+                    Payout is made automatically once all agreed and set
+                    criteria are met — including number of genuine registrations
+                    and genuine customers onboarded.
+                  </li>
+                </ol>
+
+                <h6>Please Note the Following</h6>
+                <ul>
+                  <li>
+                    Any account found or suspected to be fraudulent will be
+                    blocked and payments will be restricted.
+                  </li>
+                  <li>
+                    All phone numbers onboarded on the platform must be genuine.
+                    These numbers will be verified by the partner (MyLottoHub).
+                    Any phony act will be detected, and the account will be
+                    blocked.
+                  </li>
+                  <li>
+                    Onboarders must only share their referral codes with people
+                    they have directly marketed and explained the platform
+                    (MyLottoHub) to — not random individuals.
+                  </li>
+                  <li>
+                    Onboarders with multiple accounts will be blocked and have
+                    payments restricted.
+                  </li>
+                  <li>
+                    All payments will be made immediately after task completion.
+                  </li>
+                  <li>
+                    Onboarder accounts that have less than 40% of their referred
+                    customers funded after 3 days will be disabled from making
+                    payouts on subsequent customer acquisitions.
+                  </li>
+                </ul>
+              </div>
+
+              <div className="modal-footer">
+                <button className="btn btn-dark" onClick={handleCloseModal}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Container>
   );
 };

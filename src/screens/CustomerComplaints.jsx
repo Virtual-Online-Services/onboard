@@ -34,51 +34,61 @@ const CustomerComplaints = () => {
   };
 
   return (
-    <Container>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <Logo />
-        <button
-          className="btn"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#sidebar"
-          aria-controls="sidebar"
+    <div className="page-wrapper">
+      <Container>
+        <Button
+          variant="secondary"
+          onClick={() => navigate(-1)}
+          className="mb-3"
         >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-      </div>
-      <Sidebar />
-      <h4 className="text-center mb-4">Lodge Customer Complaints</h4>
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          label="Select Issue"
-          type="select"
-          name="issue"
-          value={formData.issue}
-          onChange={handleChange}
-          placeholder="Select Issue"
-          options={[
-            { value: "cannot-fund-account", label: "Cannot fund account" },
-            { value: "cannot-register", label: "Cannot Register" },
-            { value: "cannot-login", label: "Cannot Login" },
-            { value: "delayed-otp", label: "Delayed OTP" },
-            { value: "site-not-loading", label: "Site not loading" },
-            { value: "fund-not-reflecting", label: "Fund not reflecting" },
-          ]}
-          required
-        />
-        <FormInput
-          label="Enter User ID"
-          type="text"
-          name="userId"
-          value={formData.userId}
-          onChange={handleChange}
-          placeholder="Enter User ID"
-          required
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Container>
+          <i className="fa fa-arrow-left" /> Back
+        </Button>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <Logo />
+          <button
+            className="btn"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#sidebar"
+            aria-controls="sidebar"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <Sidebar />
+
+        <h4 className="text-center mb-4">Lodge Customer Complaints</h4>
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            label="Select Issue"
+            type="select"
+            name="issue"
+            value={formData.issue}
+            onChange={handleChange}
+            placeholder="Select Issue"
+            options={[
+              { value: "cannot-fund-account", label: "Cannot fund account" },
+              { value: "cannot-register", label: "Cannot Register" },
+              { value: "cannot-login", label: "Cannot Login" },
+              { value: "delayed-otp", label: "Delayed OTP" },
+              { value: "site-not-loading", label: "Site not loading" },
+              { value: "fund-not-reflecting", label: "Fund not reflecting" },
+            ]}
+            required
+          />
+          <FormInput
+            label="Enter User ID"
+            type="text"
+            name="userId"
+            value={formData.userId}
+            onChange={handleChange}
+            placeholder="Enter User ID"
+            required
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Container>
+    </div>
   );
 };
 
