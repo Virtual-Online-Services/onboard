@@ -130,8 +130,8 @@ const WelcomeDashboard = () => {
         <span>ID:</span> {user?.id} <br />
         <span>Target:</span> 0 <br />
         <span>Target onboarded:</span> 0 <br />
-        <span>Number of target met:</span> 0 <br />
-        <span>Total Referrals:</span> {referralMeta?.total || 0} <br />
+        <span>Total number of targets met:</span> 0 <br />
+        <span>Total referred:</span> {referralMeta?.total || 0} <br />
         <span>Amount Earned:</span> ₦
       </p>
 
