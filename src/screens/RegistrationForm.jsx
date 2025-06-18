@@ -60,8 +60,8 @@ const RegistrationForm = () => {
 
     try {
       const payload = {
-        firstname: formData.firstname,
-        surname: formData.surname,
+        first_name: formData.firstname,
+        last_name: formData.surname,
         username: formData.username,
         tell: formData.phoneNumber,
         state: formData.state,
