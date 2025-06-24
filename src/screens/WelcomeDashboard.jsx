@@ -15,10 +15,12 @@ const WelcomeDashboard = () => {
   const [user, setUser] = useState(null);
   const [referrals, setReferrals] = useState([]);
   const [referralMeta, setReferralMeta] = useState({});
+  const [target, setTarget] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  // console.log(user);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
@@ -47,6 +49,9 @@ const WelcomeDashboard = () => {
       );
 
       const result = res.data.data;
+      const target = res.data;
+      console.log(target);
+      setTarget(target);
       setReferrals(result.data || []);
       setReferralMeta(result);
     } catch (err) {

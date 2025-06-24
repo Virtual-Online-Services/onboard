@@ -121,12 +121,12 @@ const CashoutReferrals = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { bank, accountNumber, accountName, amount } = formData;
+    const amount = referralBalance;
 
-    if (!bank || !accountNumber || !accountName || !amount) {
-      toast.error("Please fill all fields");
-      return;
-    }
+    // if (!bank || !accountNumber || !accountName || !amount) {
+    //   toast.error("Please fill all fields");
+    //   return;
+    // }
 
     if (parseFloat(amount) < 1000) {
       toast.error("Minimum withdrawal is ₦1000");
