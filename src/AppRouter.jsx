@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginInitial from "./screens/LoginInitial";
 import RegistrationForm from "./screens/RegistrationForm";
 import ConfirmOTP from "./screens/ConfirmOTP";
@@ -17,7 +17,7 @@ import ForgotPassword from "./screens/ForgotPassword";
 
 const App = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginInitial />} />
         <Route path="/registration" element={<RegistrationForm />} />
@@ -78,7 +78,7 @@ const App = () => {
           }
         />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 

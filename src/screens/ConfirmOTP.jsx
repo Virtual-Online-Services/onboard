@@ -43,23 +43,25 @@ const ConfirmOTP = () => {
   };
 
   return (
-    <Container>
-      <Logo />
-      <h2 className="text-center mb-4">Confirm OTP</h2>
-      <p className="text-center mb-3">
-        Please enter the 6-digit code sent to your registered phone number
-      </p>
-      <form onSubmit={handleSubmit}>
-        <OTPInput onChange={setOtp} />
-        <Button type="submit" disabled={loading}>
-          {loading ? <span className="spinner" /> : "Verify"}
-        </Button>
+    <div className="page-wrapper">
+      <Container>
+        <Logo />
+        <h2 className="text-center mb-4">Confirm OTP</h2>
+        <p className="text-center mb-3">
+          Please enter the 6-digit code sent to your registered phone number
+        </p>
+        <form onSubmit={handleSubmit}>
+          <OTPInput onChange={setOtp} />
+          <Button type="submit" disabled={loading}>
+            {loading ? <span className="spinner" /> : "Verify"}
+          </Button>
 
-        {/* <p className="text-center text-muted mt-3">
+          {/* <p className="text-center text-muted mt-3">
           Resend Pin in 10 seconds...
         </p> */}
-      </form>
-    </Container>
+        </form>
+      </Container>
+    </div>
   );
 };
 

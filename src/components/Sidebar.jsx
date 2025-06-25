@@ -63,7 +63,7 @@ const Sidebar = () => {
             </button>
           </li>
 
-          <li className="list-group-item py-3 px-4">
+          {/* <li className="list-group-item py-3 px-4">
             <button
               onClick={() => {
                 document
@@ -76,7 +76,7 @@ const Sidebar = () => {
               <i className="fa fa-comments me-2" />
               Customer Complaints
             </button>
-          </li>
+          </li> */}
 
           <li className="list-group-item py-3 px-4">
             <button

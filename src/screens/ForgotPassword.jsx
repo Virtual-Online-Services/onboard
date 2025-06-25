@@ -43,27 +43,29 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Container>
-      <Logo />
-      <h5 className="text-left mb-2">Forgot Password</h5>
-      <p className="text-left mb-4">
-        Enter your phone number to receive a reset code.
-      </p>
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          label="Phone Number"
-          type="tel"
-          name="phone"
-          value={phone}
-          onChange={(e) => setphone(e.target.value)}
-          placeholder="Enter Phone Number"
-          required
-        />
-        <Button type="submit" disabled={loading}>
-          {loading ? <span className="spinner" /> : "Send Reset Code"}
-        </Button>
-      </form>
-    </Container>
+    <div className="page-wrapper">
+      <Container>
+        <Logo />
+        <h5 className="text-left mb-2">Forgot Password</h5>
+        <p className="text-left mb-4">
+          Enter your phone number to receive a reset code.
+        </p>
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            label="Phone Number"
+            type="tel"
+            name="phone"
+            value={phone}
+            onChange={(e) => setphone(e.target.value)}
+            placeholder="Enter Phone Number"
+            required
+          />
+          <Button type="submit" disabled={loading}>
+            {loading ? <span className="spinner" /> : "Send Reset Code"}
+          </Button>
+        </form>
+      </Container>
+    </div>
   );
 };
 

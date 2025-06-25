@@ -18,7 +18,7 @@ const SetPassword = () => {
   const [showReconfirm, setShowReconfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const phone = location?.state?.phone;
+  const phone = location?.state?.tell;
   if (!phone) {
     navigate("/login-dark");
     return null;
@@ -72,70 +72,72 @@ const SetPassword = () => {
   };
 
   return (
-    <Container>
-      <Logo />
-      <h2 className="text-center mb-4">Set Password</h2>
-      <p className="text-center mb-3">
-        Do not share this password with anyone.
-      </p>
-      <form onSubmit={handleSubmit}>
-        {/* Password Field with Toggle */}
-        <div style={{ position: "relative" }}>
-          <FormInput
-            type={showPassword ? "text" : "password"}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter Password"
-            required
-          />
-          <span
-            onClick={() => setShowPassword(!showPassword)}
-            style={{
-              position: "absolute",
-              top: "50%",
-              right: "12px",
-              transform: "translateY(-50%)",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              color: "#666",
-            }}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </span>
-        </div>
+    <div className="page-wrapper">
+      <Container>
+        <Logo />
+        <h2 className="text-center mb-4">Set Password</h2>
+        <p className="text-center mb-3">
+          Do not share this password with anyone.
+        </p>
+        <form onSubmit={handleSubmit}>
+          {/* Password Field with Toggle */}
+          <div style={{ position: "relative" }}>
+            <FormInput
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter Password"
+              required
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "12px",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                color: "#666",
+              }}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </span>
+          </div>
 
-        {/* Confirm Password Field with Toggle */}
-        <div style={{ position: "relative" }}>
-          <FormInput
-            type={showReconfirm ? "text" : "password"}
-            name="reconfirmPassword"
-            value={formData.reconfirmPassword}
-            onChange={handleChange}
-            placeholder="Reconfirm Password"
-            required
-          />
-          <span
-            onClick={() => setShowReconfirm(!showReconfirm)}
-            style={{
-              position: "absolute",
-              top: "50%",
-              right: "12px",
-              transform: "translateY(-50%)",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              color: "#666",
-            }}
-          >
-            {showReconfirm ? "Hide" : "Show"}
-          </span>
-        </div>
+          {/* Confirm Password Field with Toggle */}
+          <div style={{ position: "relative" }}>
+            <FormInput
+              type={showReconfirm ? "text" : "password"}
+              name="reconfirmPassword"
+              value={formData.reconfirmPassword}
+              onChange={handleChange}
+              placeholder="Reconfirm Password"
+              required
+            />
+            <span
+              onClick={() => setShowReconfirm(!showReconfirm)}
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "12px",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                color: "#666",
+              }}
+            >
+              {showReconfirm ? "Hide" : "Show"}
+            </span>
+          </div>
 
-        <Button type="submit" disabled={loading}>
-          {loading ? <span className="spinner" /> : "Save Password"}
-        </Button>
-      </form>
-    </Container>
+          <Button type="submit" disabled={loading}>
+            {loading ? <span className="spinner" /> : "Save Password"}
+          </Button>
+        </form>
+      </Container>
+    </div>
   );
 };
 

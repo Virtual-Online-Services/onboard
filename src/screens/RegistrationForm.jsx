@@ -75,7 +75,7 @@ const RegistrationForm = () => {
       if (response) {
         toast.success("Registration successful!");
         setTimeout(() => {
-          navigate("/confirm-otp");
+          navigate("/confirm-otp", { state: { phone: formData.phoneNumber } });
         }, 1500);
       } else {
         toast.error("An error occurred. Please try again.");

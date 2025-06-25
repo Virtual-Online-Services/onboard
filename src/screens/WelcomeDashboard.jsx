@@ -50,7 +50,6 @@ const WelcomeDashboard = () => {
 
       const result = res.data.data;
       const target = res.data;
-      console.log(target);
       setTarget(target);
       setReferrals(result.data || []);
       setReferralMeta(result);
@@ -106,6 +105,14 @@ const WelcomeDashboard = () => {
       toast("Share API not supported");
     }
   };
+  const handleCashoutClick = () => {
+    if (target?.target !== target?.target_done) {
+      toast.error("You must meet your full target before cashing out.");
+      return;
+    }
+
+    navigate("/cashout-referrals");
+  };
 
   return (
     <Container>
@@ -133,15 +140,19 @@ const WelcomeDashboard = () => {
 
       <p className="text-left mb-4 fw-bolder">
         <span>ID:</span> {user?.id} <br />
-        <span>Target:</span> 0 <br />
-        <span>Target onboarded:</span> 0 <br />
-        <span>Total number of targets met:</span> 0 <br />
+        <span>Target:</span> {target?.target} <br />
+        <span>Target onboarded:</span> {target?.target_done} <br />
+        <span>Total number of targets met:</span> {target?.times_hit_target}
+        <br />
         <span>Total referred:</span> {referralMeta?.total || 0} <br />
-        <span>Amount Earned:</span> ₦
+        <span>Amount Earned:</span> ₦{target?.onboarder_total_balance}
       </p>
 
       <div className="d-flex gap-2 mb-4">
-        <Button onClick={() => navigate("/cashout-referrals")}>
+        <Button
+          onClick={handleCashoutClick}
+          disabled={target?.target !== target?.target_done}
+        >
           Cashout Referrals
         </Button>
       </div>
