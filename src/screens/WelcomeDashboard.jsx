@@ -144,7 +144,9 @@ const WelcomeDashboard = () => {
         <span>Total number of targets met:</span> {target?.times_hit_target}
         <br />
         <span>Total referred:</span> {referralMeta?.total || 0} <br />
-        <span>Amount Earned:</span> ₦{target?.onboarder_wallet_balance}
+        <span>Wallet Balance:</span> ₦{target?.onboarder_wallet_balance}
+        <br />
+        <span>Total Amount Earned:</span> ₦{target?.onboarder_total_balance}
       </p>
 
       <div className="d-flex gap-2 mb-4">

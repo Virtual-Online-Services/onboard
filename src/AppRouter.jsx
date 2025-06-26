@@ -16,6 +16,15 @@ import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./screens/ForgotPassword";
 
 const App = () => {
+  const handleWhatsAppClick = () => {
+    const phoneNumber = "2349045271959";
+    const message = "Hello, I need assistance with Onboarder!";
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -37,14 +46,14 @@ const App = () => {
             </PrivateRoute>
           }
         />
-        {/* <Route
+        <Route
           path="/get-paid-bank"
           element={
             <PrivateRoute>
               <GetPaid />
             </PrivateRoute>
           }
-        /> */}
+        />
         <Route
           path="/cashout-referrals"
           element={
@@ -78,6 +87,22 @@ const App = () => {
           }
         />
       </Routes>
+      <button
+        className="btn btn-success rounded-circle position-fixed"
+        style={{
+          bottom: "20px",
+          right: "20px",
+          width: "60px",
+          height: "60px",
+          zIndex: 1000,
+        }}
+        onClick={handleWhatsAppClick}
+      >
+        <i
+          className="fab fa-whatsapp"
+          style={{ fontSize: "28px", color: "white" }}
+        ></i>
+      </button>
     </BrowserRouter>
   );
 };
