@@ -106,11 +106,10 @@ const WelcomeDashboard = () => {
     }
   };
   const handleCashoutClick = () => {
-    if (target?.target !== target?.target_done) {
+    if (!target?.target_reached) {
       toast.error("You must meet your full target before cashing out.");
       return;
     }
-
     navigate("/cashout-referrals");
   };
 
@@ -145,14 +144,11 @@ const WelcomeDashboard = () => {
         <span>Total number of targets met:</span> {target?.times_hit_target}
         <br />
         <span>Total referred:</span> {referralMeta?.total || 0} <br />
-        <span>Amount Earned:</span> ₦{target?.onboarder_total_balance}
+        <span>Amount Earned:</span> ₦{target?.onboarder_wallet_balance}
       </p>
 
       <div className="d-flex gap-2 mb-4">
-        <Button
-          onClick={handleCashoutClick}
-          disabled={target?.target !== target?.target_done}
-        >
+        <Button onClick={handleCashoutClick} disabled={!target?.target_reached}>
           Cashout Referrals
         </Button>
       </div>
