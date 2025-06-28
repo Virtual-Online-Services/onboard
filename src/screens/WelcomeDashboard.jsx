@@ -139,12 +139,12 @@ const WelcomeDashboard = () => {
 
       <p className="text-left mb-4 fw-bolder">
         <span>ID:</span> {user?.id} <br />
-        <span>Target:</span> {target?.target} <br />
-        <span>Target onboarded:</span> {target?.target_done} <br />
-        <span>Total number of targets met:</span> {target?.times_hit_target}
-        <br />
-        <span>Total referred:</span> {referralMeta?.total || 0} <br />
-        <span>Wallet Balance:</span> ₦{target?.onboarder_wallet_balance}
+        {/* <span>Target:</span> {target?.target} <br /> */}
+        <span>Target Onboarded:</span> {target?.target_done} <br />
+        {/* <span>Total number of targets met:</span> {target?.times_hit_target}
+        <br /> */}
+        <span>Total Onboarded:</span> {referralMeta?.total || 0} <br />
+        <span>Onboarder Balance:</span> ₦{target?.onboarder_wallet_balance}
         <br />
         <span>Total Amount Earned:</span> ₦{target?.onboarder_total_balance}
       </p>
