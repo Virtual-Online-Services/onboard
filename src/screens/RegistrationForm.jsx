@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-// import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import { HTTP } from "../utils";
 import Container from "../components/Container";
 import Logo from "../components/Logo";
 import FormInput from "../components/FormInput";
 import Button from "../components/Button";
 
-// const siteKey = import.meta.env.VITE_SITE_KEY;
+const siteKey = import.meta.env.VITE_SITE_KEY;
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
-
+  const [captchaToken, setCaptchaToken] = useState(""); // State to store captcha response
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
@@ -32,6 +32,7 @@ const RegistrationForm = () => {
   const [states, setStates] = useState([]);
   const [lgas, setLgas] = useState([]);
   const [selectedState, setSelectedState] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,10 +42,9 @@ const RegistrationForm = () => {
     });
   };
 
-  // const handleCaptchaVerification = (token) => {
-  //   setCaptchaToken(token);
-  // };
-
+  const handleCaptchaVerification = (token) => {
+    setCaptchaToken(token);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -53,11 +53,12 @@ const RegistrationForm = () => {
       return;
     }
 
-    // if (!captchaToken) {
-    //   toast.error("Please verify the CAPTCHA.");
-    //   return;
-    // }
+    if (!captchaToken) {
+      toast.error("Please verify the CAPTCHA.");
+      return;
+    }
 
+    setLoading(true); // Start spinner
     try {
       const payload = {
         first_name: formData.firstname,
@@ -67,7 +68,7 @@ const RegistrationForm = () => {
         state: formData.state,
         lga: formData.lga,
         platform: "mobile",
-        // recaptcha_token: captchaToken,
+        recaptcha_token: captchaToken,
       };
 
       const response = await HTTP.post("/register", payload);
@@ -85,8 +86,9 @@ const RegistrationForm = () => {
         error.response?.data?.message ||
         error.response?.data?.messgae ||
         "Registration failed. Please try again.";
-
       toast.error(message);
+    } finally {
+      setLoading(false); // Stop spinner
     }
   };
 
@@ -171,7 +173,6 @@ const RegistrationForm = () => {
           placeholder="Enter Phone Number"
           required
         />
-
         <FormInput
           // label="State"
           type="select"
@@ -182,7 +183,6 @@ const RegistrationForm = () => {
           required
           options={states.map((s) => ({ value: s, label: s }))}
         />
-
         <FormInput
           // label="LGA"
           type="select"
@@ -216,14 +216,24 @@ const RegistrationForm = () => {
             <span className="text-primary">Terms and Conditions</span>
           </label>
         </div>
-
         {/* ReCAPTCHA Component */}
-        {/* <div className="my-4">
+        <div className="my-4">
           <ReCAPTCHA sitekey={siteKey} onChange={handleCaptchaVerification} />
-        </div> */}
-
-        <Button type="submit">Proceed</Button>
-
+        </div>{" "}
+        
+        <Button type="submit" disabled={loading}>
+          {loading ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+              />
+              Processing...
+            </>
+          ) : (
+            "Proceed"
+          )}
+        </Button>
         <div className="text-center mt-3">
           <p>
             Already have an account?{" "}
