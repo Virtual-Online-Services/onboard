@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Container from "../components/Container";
@@ -19,11 +19,7 @@ const SetPassword = () => {
   const [loading, setLoading] = useState(false);
 
   const phone = location?.state?.tell;
-  if (!phone) {
-    navigate("/login-dark");
-    return null;
-  }
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({

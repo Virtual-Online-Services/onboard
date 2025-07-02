@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Container from "../components/Container";
@@ -14,6 +14,17 @@ const ConfirmOTP = () => {
 
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(60);
+
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setInterval(() => {
+        setCooldown((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [cooldown]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +53,32 @@ const ConfirmOTP = () => {
     }
   };
 
+  const handleResend = async () => {
+    if (!phone) {
+      toast.error("Missing phone number.");
+      return;
+    }
+
+    try {
+      setResendLoading(true);
+      await HTTP.post("/user/resend-otp", { user_details: phone });
+      toast.success("OTP resent successfully.");
+      setCooldown(60);
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Failed to resend OTP.";
+      toast.error(message);
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const sec = String(seconds % 60).padStart(2, "0");
+    return `${min}:${sec}`;
+  };
+
   return (
     <div className="page-wrapper">
       <Container>
@@ -56,9 +93,21 @@ const ConfirmOTP = () => {
             {loading ? <span className="spinner" /> : "Verify"}
           </Button>
 
-          {/* <p className="text-center text-muted mt-3">
-          Resend Pin in 10 seconds...
-        </p> */}
+          <div className="text-center mt-3">
+            {cooldown > 0 ? (
+              <p className="text-muted">
+                Resend OTP in <strong>{formatTime(cooldown)}</strong>
+              </p>
+            ) : (
+              <Button
+                type="button"
+                onClick={handleResend}
+                disabled={resendLoading}
+              >
+                {resendLoading ? <span className="spinner" /> : "Resend OTP"}
+              </Button>
+            )}
+          </div>
         </form>
       </Container>
     </div>
