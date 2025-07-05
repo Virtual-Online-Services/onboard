@@ -61,7 +61,7 @@ const ConfirmOTP = () => {
 
     try {
       setResendLoading(true);
-      await HTTP.post("/user/resend-otp", { user_details: phone });
+      await HTTP.post("/user/resend-otp", { user_details: phone, type: "phone" });
       toast.success("OTP resent successfully.");
       setCooldown(60);
     } catch (error) {
